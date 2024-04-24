@@ -1,0 +1,89 @@
+@mixin textWrapper($property) {
+  display: -webkit-box !important;
+  -webkit-line-clamp: $property !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+body {
+  margin: 0;
+}
+.main {
+  padding: 30px;
+  button {
+    cursor: pointer;
+    outline: none;
+    color: #FFFFFF;
+    font-size: 14px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #004E9B;
+    border: 1px solid #004E9B;
+  }
+  button[disabled] {
+    cursor: not-allowed;
+    border-color: #d9d9d9;
+    color: rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+}
+.row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 20px;
+}
+.card {
+  padding: 10px;
+  border-radius: 8px;
+  background: #FFFFFF;
+  border: 1px solid #9d9d9d;
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+  .title {
+    font-size: 18px;
+    margin: 0 0 10px;
+    @include textWrapper(1);
+  }
+  .body {
+    margin: 0;
+    @include textWrapper(3);
+  }
+}
+.filters {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  grid-gap: 10px;
+  margin-bottom: 1rem;
+  h3 {
+    flex: 1;
+    margin: 0;
+  }
+}
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  grid-gap: 5px;
+  margin-top: 1rem;
+  span {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #004E9B;
+    display: inline-block;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+  }
+  .active {
+    color: #FFFFFF;
+    background: #004E9B;
+  }
+}
