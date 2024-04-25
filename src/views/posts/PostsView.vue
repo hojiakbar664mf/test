@@ -139,7 +139,7 @@ onMounted(() => {
         <button class="btn" @click="nextPage" :disabled="currentPage === totalPages">Next</button>
       </div>
     </template>
-    <div class="map">
+    <div v-if="users.length > 0" class="map">
       <map-users :users="users"/>
     </div>
   </container>
