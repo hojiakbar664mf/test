@@ -3,9 +3,14 @@ import {createRouter, createWebHistory} from "vue-router";
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: () => import('@/views/Home.vue'),
+    name: 'PostsView',
+    component: () => import('@/views/posts/PostsView.vue'),
   },
+  {
+    path: '/post/:id',
+    name: 'PostDetailView',
+    component: () => import('@/views/posts/PostDetailView.vue')
+  }
 ];
 
 const router = createRouter({

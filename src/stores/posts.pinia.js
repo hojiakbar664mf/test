@@ -8,6 +8,8 @@ export const usePosts = defineStore('posts', {
     pageSize: 10,
     totalPages: 0,
     posts: [],
+    comments: [],
+    post_detail: null,
   }),
   actions: {
     setCurrentPage(page) {
@@ -27,6 +29,64 @@ export const usePosts = defineStore('posts', {
       }).finally(() => {
         this.loading = false;
       })
-    }
+    },
+    getPostById(id) {
+      this.loading = true;
+      api({
+        url: `posts/${id}`,
+        method: 'get',
+      }).then(({data}) => {
+        this.post_detail = data;
+      }).catch((error) => {
+        console.log(error)
+      }).finally(() => {
+        this.loading = false;
+      })
+    },
+    getCommentsByPostId(id) {
+      this.loading = true;
+      api({
+        url: `posts/${id}/comments`,
+        method: 'get',
+      }).then(({data}) => {
+        this.comments = data;
+      }).catch((error) => {
+        console.log(error)
+      }).finally(() => {
+        this.loading = false;
+      })
+    },
+    createPost(data) {
+      api({
+        url: 'posts',
+        method: 'post',
+        data: data
+      }).then(({data}) => {
+        console.log(data)
+      }).catch((error) => {
+        console.log(error)
+      }).finally(() => {})
+    },
+    updatePost(data) {
+      api({
+        url: `posts/${data.id}`,
+        method: 'put',
+        data: data
+      }).then(({data}) => {
+        console.log(data)
+      }).catch((error) => {
+        console.log(error)
+      }).finally(() => {})
+    },
+    deletePost(id) {
+      api({
+        url: `posts/${id}`,
+        method: 'delete',
+      }).then(({data}) => {
+        console.log(data)
+      }).catch((error) => {
+        console.log(error)
+      }).finally(() => {})
+    },
   }
 });

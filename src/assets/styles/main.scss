@@ -1,3 +1,5 @@
+@import "forms";
+
 @mixin textWrapper($property) {
   display: -webkit-box !important;
   -webkit-line-clamp: $property !important;
@@ -10,31 +12,48 @@ body {
 }
 .main {
   padding: 30px;
-  button {
-    cursor: pointer;
-    outline: none;
-    color: #FFFFFF;
-    font-size: 14px;
-    padding: 8px 10px;
-    border-radius: 8px;
-    background: #004E9B;
-    border: 1px solid #004E9B;
-  }
-  button[disabled] {
-    cursor: not-allowed;
-    border-color: #d9d9d9;
-    color: rgba(0, 0, 0, 0.25);
-    background-color: rgba(0, 0, 0, 0.04);
+  .container {
+    max-width: 100%;
+    margin: 0 auto;
+    .row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 20px;
+    }
   }
 }
-.container {
-  max-width: 100%;
-  margin: 0 auto;
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-gap: 8px;
+  cursor: pointer;
+  outline: none;
+  color: #FFFFFF;
+  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #004E9B;
+  border: 1px solid #004E9B;
 }
-.row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 20px;
+.btn-delete {
+  border-color: crimson;
+  background: crimson;
+}
+button[disabled] {
+  cursor: not-allowed;
+  border-color: #d9d9d9;
+  color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.04);
+}
+.btn-group {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  grid-gap: 10px;
+  .btn {
+    margin: 0;
+  }
 }
 .card {
   padding: 10px;
@@ -86,4 +105,23 @@ body {
     color: #FFFFFF;
     background: #004E9B;
   }
+}
+.post-detail {}
+.comments {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  li {
+    width: 600px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background: #FFFFFF;
+    border: 1px solid #d9d9d9;
+  }
+}
+.map {
+  border: 1px solid red;
+  margin-top: 3rem;
+  min-height: 500px;
 }

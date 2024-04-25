@@ -3,7 +3,10 @@ import {onMounted, ref} from "vue";
 import {storeToRefs} from "pinia";
 import {useUsers} from "@/stores/users.pinia.js";
 import {usePosts} from "@/stores/posts.pinia.js";
+import * as XLSX from 'xlsx/xlsx.mjs';
 import Container from "@/components/Container.vue";
+import CreatePost from "@/views/posts/components/CreatePost.vue";
+import MapUsers from "@/components/MapUsers.vue";
 
 const storeUsers = useUsers();
 const storePosts = usePosts();
@@ -13,7 +16,7 @@ const userId = ref("");
 
 const handleUserId = (id) => {
   storePosts.getPosts({
-    page: currentPage.value,
+    page: 1,
     limit: pageSize.value,
     userId: id.target.value
   });
@@ -60,6 +63,24 @@ const handleResetFilter = () => {
     limit: pageSize.value
   });
 };
+const convertToExel = () => {
+  const data = posts.value;
+  const workbook = XLSX.utils.book_new();
+  data.forEach((arr, idx) => {
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    XLSX.utils.book_append_sheet(workbook, worksheet, `data${idx+1}`);
+  });
+  const excelBuffer = XLSX.write(workbook, { type: 'array', bookType: 'xlsx' });
+  const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'data.xlsx';
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url);
+  document.body.removeChild(a);
+};
 
 onMounted(() => {
   storeUsers.getUsers();
@@ -75,7 +96,7 @@ onMounted(() => {
     <div class="filters">
       <h3>Posts</h3>
       <div class="users">
-        <label>Users:</label>
+        <label>Users: </label>
         <select v-model="userId" @change="handleUserId">
           <option value="" disabled selected>Filter by user</option>
           <option v-for="user of users" :value="user.id">
@@ -84,7 +105,7 @@ onMounted(() => {
         </select>
       </div>
       <div class="page-limit">
-        <label>Limit:</label>
+        <label>Limit: </label>
         <select v-model="pageSize" @change="setPageLimit">
           <option :value="totalCount">All</option>
           <option value="10">10</option>
@@ -92,20 +113,22 @@ onMounted(() => {
           <option value="50">50</option>
         </select>
       </div>
-      <button @click="handleResetFilter">reset</button>
+      <button class="btn" @click="handleResetFilter">reset</button>
+      <button class="btn" @click="convertToExel">Convert to Excel</button>
+      <create-post/>
     </div>
     <template v-if="loading">loading...</template>
     <template v-else>
       <div class="row">
         <div class="card" v-for="post of posts">
-          <router-link to="/">
+          <router-link :to="`/post/${post.id}`">
             <h3 class="title">{{ post.title }}</h3>
             <p class="body">{{ post.body }}</p>
           </router-link>
         </div>
       </div>
       <div v-if="totalPages > 1" class="pagination">
-        <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
+        <button class="btn" @click="prevPage" :disabled="currentPage === 1">Previous</button>
         <span
             v-for="page of totalPages"
             :class="{'active': currentPage === page}"
@@ -113,9 +136,12 @@ onMounted(() => {
         >
         {{ page }}
       </span>
-        <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
+        <button class="btn" @click="nextPage" :disabled="currentPage === totalPages">Next</button>
       </div>
     </template>
+    <div class="map">
+      <map-users :users="users"/>
+    </div>
   </container>
 </template>
 
